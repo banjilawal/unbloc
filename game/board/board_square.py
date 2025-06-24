@@ -4,13 +4,15 @@ from typing import Optional
 from game.common.game_constant import GameConstant
 from game.exception.exception import InvalidIdError, NegativeRowError, NegativeColumnError
 
+from game.common.game_coordinate import  GameCoordinate
+from game.occupy.occupier import Occupier
+
 
 @dataclass
 class GameBoardSquare:
-    _id: int
-    _row: int
-    _column: int
-    _occupant: Optional['GameFigure'] = None
+    id: int
+    coordinate: GameCoordinate
+    occupant: Occupier = None
 
     def __post_init__(self):
         """Validate initialization parameters"""
@@ -21,9 +23,10 @@ class GameBoardSquare:
         if self._column < 0:
             raise NegativeColumnError("GameBoardSquare cannot be on a negative column.")
 
+
     @property
-    def occupant(self) -> Optional['GameFigure']:
-        return self._occupant
+    def occupant(self) -> Optional['Occupier']:
+        return self.occupant
 
     @property
     def occupied(self) -> bool:
