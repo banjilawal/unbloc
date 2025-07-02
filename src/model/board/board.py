@@ -44,24 +44,14 @@ class Board:
             )
         )
         object.__setattr__(self, 'cells', rows)
-        # rows = []
-        # for row in range(self.row_count):
-        #     current_row = []
-        #     for column in range(self.column_count):
-        #         cell_id = row * self.column_count + column + 1
-        #         cell = Cell(id=cell_id, coordinate=GridCoordinate(row=row, column=column))
-        #         current_row.append(cell)
-        #     rows.append(tuple(current_row))
-        # object.__setattr__(self, 'cells', tuple(rows))
 
-    @@property
+
     def row_count(self) -> int:
         return self.dimension.height
 
-    @@property
+
     def column_count(self) -> int:
         return self.dimension.length
-
 
     def print(self):
         """Print the board with cell IDs"""
