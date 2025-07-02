@@ -1,11 +1,13 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from model.board.grid_coordinate import GridCoordinate
 from common.game_color import GameColor
 from src.common.game_default import GameDefault
 from src.exception.exception import InvalidIdError
-from src.model.occupant.occupant import Occupant
+
+if TYPE_CHECKING:
+    from model.occupant.occupant import Occupant
 
 
 @dataclass

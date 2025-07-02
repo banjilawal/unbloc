@@ -1,7 +1,6 @@
 import pygame
 
 from model.board.board import Board
-from view.board_view import BoardView
 
 if __name__ == "__main__":
     board = Board(id=1)

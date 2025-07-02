@@ -18,11 +18,12 @@ class Board:
     MIN_COLUMN_COUNT = 2
 
     id: int
-    portal: EscapePortal
+    portal: Optional[EscapePortal] = None
 
     crates: tuple[Crate, ...] = field(default_factory=tuple)
     boulders: tuple[Boulder, ...] = field(default_factory=tuple)
     cells: tuple[tuple[Cell, ...], ...] = field(init=False, repr=False)
+
     dimension: Dimension = field(default=Dimension(length=GameDefault.COLUMN_COUNT, height=GameDefault.ROW_COUNT))
 
     def __post_init__(self):
@@ -38,10 +39,11 @@ class Board:
         # Create the grid of cells
         rows = tuple(
             tuple(
-                Cell(id=self.dimension.height * self.dimension.length + column + 1,
+                Cell(id= (row + 1) * (column + 1),
                      coordinate=GridCoordinate(row=self.dimension.height, column=self.dimension.length))
                 for column in range(self.dimension.length)
             )
+            for row in range(self.dimension.height)
         )
         object.__setattr__(self, 'cells', rows)
 
