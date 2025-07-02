@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-from model.board.grid_coordinate import GridCoordinate
 from model.occupant.occupant import Occupant
 from travel.bearing import Bearing
 from travel.travel_decision import TravelDecision

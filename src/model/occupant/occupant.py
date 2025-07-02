@@ -4,7 +4,7 @@ from typing import Optional
 from common.game_color import GameColor
 from model.board.grid_coordinate import GridCoordinate
 from model.cell.cell import Cell
-from model.occupant.dimension import Dimension
+from common.dimension import Dimension
 
 @dataclass
 class Occupant:
