@@ -14,13 +14,13 @@ class BoardView:
         self.cell_px = cell_px
 
     def draw_board(self, surface: pygame.Surface):
-        for row_index in range(self.board.row_count):
-            for column_index in range(self.board.column_count):
+        for row_index in range(self.board.dimension.height):
+            for column_index in range(self.board.dimension.length):
                 cell = self.board.cells[row_index][column_index]
                 self.draw_cell(surface, cell)
 
     def draw_cell(self, surface: pygame.Surface, cell: Cell):
-        x = cell.column * self.cell_px
-        y = cell.row * self.cell_px
+        x = cell.coordinate.column * self.cell_px
+        y = cell.coordinate.row  * self.cell_px
         rectangle = pygame.Rect(x, y, self.cell_px, self.cell_px)
         pygame.draw.rect(surface, cell.color.pygame_color, rectangle)
