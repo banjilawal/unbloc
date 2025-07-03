@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class Cell:
     id: int
     coordinate: GridCoordinate
-    color: GameColor = field(default=GameDefault.CELL_COLOR)
+    color: GameColor = field(default=GameColor.WHITE)
     occupant: Optional['Occupant'] = field(default=None)
 
     def __post_init__(self):

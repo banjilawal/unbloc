@@ -1,26 +1,27 @@
+from typing import Tuple
+
 import pygame
+from pygame import Color
 
 from common.game_default import GameDefault
 from model.board.board import Board
 from model.cell.cell import Cell
+from view.cell_view import CellView
 
 
 class BoardView:
     board: Board
     cell_px: int
 
-    def __init__(self, board: Board, cell_px: int = GameDefault.CELL_PX):
+    def __init__(self, board: Board, cell_px: int =80, board_bg_color: Tuple[int, int, int] = Color):
         self.board = board
         self.cell_px = cell_px
+        self.cell_view = CellView(cell_px)
 
     def draw_board(self, surface: pygame.Surface):
-        for row_index in range(self.board.dimension.height):
-            for column_index in range(self.board.dimension.length):
-                cell = self.board.cells[row_index][column_index]
-                self.draw_cell(surface, cell)
-
-    def draw_cell(self, surface: pygame.Surface, cell: Cell):
-        x = cell.coordinate.column * self.cell_px
-        y = cell.coordinate.row  * self.cell_px
-        rectangle = pygame.Rect(x, y, self.cell_px, self.cell_px)
-        pygame.draw.rect(surface, cell.color.pygame_color, rectangle)
+        surface.fill(Color(30, 30, 30))
+        for row in self.board.cells:
+            for current_cell in row:
+                # IMPORTANT: Commented out the print statement to avoid performance issues and "infinite loop" perception.
+                # print(f"Drawing cell ID: {current_cell.id} at coordinate: {current_cell.coordinate}")
+                self.cell_view.draw_cell(cell=current_cell, surface=surface)

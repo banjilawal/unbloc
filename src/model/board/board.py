@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
+from common.game_color import GameColor
 from exception.exception import InvalidNumberOfRowsError, InvalidNumberOfColumnsError
 from model.board.grid_coordinate import GridCoordinate
 from model.occupant.crate import Crate
@@ -20,41 +21,43 @@ class Board:
     id: int
     portal: Optional[EscapePortal] = None
 
-    crates: tuple[Crate, ...] = field(default_factory=tuple)
-    boulders: tuple[Boulder, ...] = field(default_factory=tuple)
-    cells: tuple[tuple[Cell, ...], ...] = field(init=False, repr=False)
+    crates: Tuple[Crate, ...] = field(default_factory=tuple)
+    boulders: Tuple[Boulder, ...] = field(default_factory=tuple)
+    cells: Tuple[Tuple[Cell, ...], ...] = field(init=False, repr=False)
 
-    dimension: Dimension = field(default=Dimension(length=GameDefault.COLUMN_COUNT, height=GameDefault.ROW_COUNT))
+    color: GameColor
+    dimension: Dimension = field(default_factory=lambda: Dimension(length=GameDefault.COLUMN_COUNT, height=GameDefault.ROW_COUNT))
 
     def __post_init__(self):
         if self.id < GameDefault.MIN_ID:
             raise InvalidIdError("Board id below minimum value.")
 
         if self.dimension.height < self.MIN_ROW_COUNT:
-            raise InvalidNumberOfRowsError()
+            raise InvalidNumberOfRowsError("Board number of rows below minimum value.")
 
         if self.dimension.length < self.MIN_COLUMN_COUNT:
-            raise InvalidNumberOfColumnsError
+            raise InvalidNumberOfColumnsError("Board number of columns below minimum value.")
 
-        # Create the grid of cells
-        rows = tuple(
-            tuple(
-                Cell(id= (row + 1) * (column + 1),
-                     coordinate=GridCoordinate(row=self.dimension.height, column=self.dimension.length))
-                for column in range(self.dimension.length)
-            )
-            for row in range(self.dimension.height)
-        )
-        object.__setattr__(self, 'cells', rows)
+        # Create the grid of cells with correct coordinates
+        rows_list = [] # Use a list for building, then convert to tuple
+        for row_index in range(self.dimension.height):
+            current_row_list = []
+            for column_index in range(self.dimension.length):
+                # Correctly assign the cell's own row and column to its coordinate
+                cell_id = row_index * self.dimension.length + column_index + 1 # More standard ID calculation
+                cell = Cell(id=cell_id, coordinate=GridCoordinate(row=row_index, column=column_index))
+                current_row_list.append(cell)
+            rows_list.append(tuple(current_row_list)) # Convert inner list to tuple
+
+        # Set the cells attribute using object.__setattr__ for frozen dataclass
+        object.__setattr__(self, 'cells', tuple(rows_list)) # Convert outer list to tuple
 
 
     def row_count(self) -> int:
         return self.dimension.height
 
-
     def column_count(self) -> int:
         return self.dimension.length
-
     def print(self):
         """Print the board with cell IDs"""
         for row in self.cells:
