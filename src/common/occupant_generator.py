@@ -2,7 +2,7 @@ import random
 from common.dimension import Dimension
 from common.id_generator import global_id_generator
 from model.occupant.boulder import Boulder
-from model.occupant.ladder import Ladder
+from model.occupant.crate import Crate
 
 
 class OccupantGenerator:
@@ -23,10 +23,10 @@ class OccupantGenerator:
     def generate_boulders(self, max_length: int, max_height:int, count: int) -> list[Boulder]:
         return [self.generate_boulder(max_length, max_height) for _ in range(count)]
 
-    def generate_ladder(self, max_height: int) -> Ladder:
-        ladder = Ladder(id=global_id_generator.next_crate_id(), height=random.randint(2, max_height), coordinate=None)
+    def generate_ladder(self, max_height: int) -> Crate:
+        ladder = Crate(id=global_id_generator.next_crate_id(), height=random.randint(2, max_height), coordinate=None)
         print(f"created crate with id: {ladder.id}, dimension: {ladder.dimension}, area: {ladder.dimension.area()}")
         return ladder
 
-    def generate_ladders(self,  max_height:int, count: int) -> list[Ladder]:
+    def generate_ladders(self,  max_height:int, count: int) -> list[Crate]:
         return [self.generate_ladder(max_height) for _ in range(count)]

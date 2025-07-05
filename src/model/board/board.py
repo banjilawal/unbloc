@@ -6,7 +6,7 @@ from typing import Optional, Tuple, List
 from common.id_generator import global_id_generator
 from exception.exception import InvalidNumberOfRowsError, InvalidNumberOfColumnsError
 from model.board.grid_coordinate import GridCoordinate
-from model.occupant.ladder import Ladder
+from model.occupant.crate import Crate
 from common.dimension import Dimension
 from model.portal.door import Door
 from model.occupant.boulder import Boulder
@@ -22,7 +22,7 @@ class Board:
     MIN_COLUMN_COUNT = 2
 
     door: Portal = field(default_factory=lambda: Door(id=global_id_generator.next_portal_id(), coordinate=None))
-    ladders: List[Ladder] = field(default_factory=list)
+    crates: List[Crate] = field(default_factory=list)
     boulders: List[Boulder] = field(default_factory=list)
     cells: Tuple[Tuple[Cell, ...], ...] = field(init=False, repr=False)
 
@@ -62,11 +62,11 @@ class Board:
     def add_boulders(self, boulders: List[Boulder]):
         self.boulders.extend(boulders)
 
-    def add_ladder(self, ladder: Ladder):
-        self.ladders.append(ladder)
+    def add_crate(self, crate: Crate):
+        self.crates.append(crate)
 
-    def add_ladders(self, ladders: List[Ladder]):
-        self.ladders.extend(ladders)
+    def add_crates(self, crates: List[Crate]):
+        self.crates.extend(crates)
 
     def are_occupied(self, top_left_coord: GridCoordinate, dimension: Dimension) -> bool:
         """
@@ -113,7 +113,7 @@ class Board:
 
     def place_ladders_randomly(self):
         placed_boulders = []
-        for ladder in self.ladders:
+        for ladder in self.crates:
             placed = False
             attempts = 0
             while not placed and attempts < 1:
